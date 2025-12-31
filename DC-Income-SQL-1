@@ -1,0 +1,27 @@
+-- Purpose:
+-- Created the first table used for the first visualization (scatter) in tableau as a .twbx file
+-- Simple code to start the project and start to organize my data
+
+
+CREATE OR REPLACE VIEW
+`dc-income.DC_INCOME_PROJET_DATASET.vw_dc_base` AS
+SELECT
+  OBJECTID,
+  FIRST_NAME,
+  LAST_NAME,
+  JOBTITLE,
+  DESCRSHORT,
+  GRADE,
+  GVT_TYPE_OF_APPT,
+
+  -- Appointment grouping from the suffix (Reg/Term/Temp)
+  CASE
+    WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'TEMP' THEN 'Temporary'
+    WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'TERM' THEN 'Term'
+    WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'REG'  THEN 'Regular'
+    ELSE 'Other/Unknown'
+  END AS appointment_group,
+
+  HIREDATE_STRING AS hire_date,
+  COMPRATE AS annual_income
+FROM `dc-income.DC_INCOME_PROJET_DATASET.DC_INCOME_RAW_DATA`;
