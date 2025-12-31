@@ -1,26 +1,68 @@
-# DC Government Income Analysis
+# Data Analytics Portfolio
 
-## Overview
-This project analyzes compensation patterns among Washington, DC government employees, with a focus on how **income varies by appointment type and tenure**. Using SQL in BigQuery and interactive Tableau dashboards, the project transforms raw administrative data into analysis-ready models and visual insights.
+## About Me
+I am an aspiring data analyst with experience in **SQL, data modeling, and data visualization**, focused on transforming raw data into clear, decision-ready insights. My projects emphasize clean data pipelines, thoughtful assumptions, and reproducible analysis.
 
-The goal of this project is to demonstrate:
-- Clean data modeling practices
-- Thoughtful handling of assumptions and edge cases
-- Clear communication of insights through visualization
+This portfolio showcases end-to-end analytics work, from data ingestion and validation to modeling and interactive dashboards.
 
 ---
 
-## Research Questions
-- How does income differ across **Regular**, **Term**, and **Temporary** employees?
-- How does **tenure** relate to pay levels across appointment types?
-- Are there noticeable differences in income distributions between employee groups?
+## Core Skills
+- **SQL (BigQuery, PostgreSQL)**  
+  CTEs, window functions, data modeling, data quality checks
+- **Data Visualization (Tableau)**  
+  Interactive dashboards, distribution analysis, trend analysis
+- **Data Modeling & Analytics**  
+  Semantic layers, analytic tables, feature engineering
+- **Version Control**  
+  GitHub, reproducible project structure, documentation
 
 ---
 
-## Data Source
-- **DC Government Employee Income Data**
-- Raw data is preserved and transformed through views and analytic tables to ensure reproducibility and consistency.
+## Featured Projects
+
+### DC Government Income Analysis
+**Tools:** SQL (BigQuery), Tableau  
+
+- Built a multi-layer SQL data pipeline using base views and analytic tables  
+- Standardized appointment types and computed tenure-based features  
+- Designed interactive Tableau dashboards comparing income distributions and tenure trends  
+
+**Repository:**  
+`dc-income-analysis/`
 
 ---
 
-## Project Structure
+### Time-Series & Trend Analysis (In Progress)
+**Tools:** SQL (Window Functions), Tableau  
+
+- Analyzing temporal patterns using rolling averages and lagged metrics  
+- Applying advanced SQL techniques to identify trends and seasonality  
+
+**Repository:**  
+`time-series-analysis/`
+
+---
+
+## Project Design Philosophy
+Across projects, I follow consistent analytics best practices:
+- Separate **raw data**, **base views**, and **analytic models**
+- Document assumptions clearly
+- Design outputs with end-users and decision-makers in mind
+- Prioritize reproducibility and readability
+
+---
+
+## Tools & Technologies
+- SQL (BigQuery, PostgreSQL)
+- Tableau
+- GitHub
+- Data Cleaning & Validation Techniques
+
+---
+
+## Contact
+- **GitHub:** [your-github-username]
+- **LinkedIn:** [your-linkedin-url]
+
+This portfolio is actively evolving as I continue to expand my technical skillset and tackle more complex analytics problems.
