@@ -62,7 +62,5 @@ Across projects, I follow consistent analytics best practices:
 ---
 
 ## Contact
-- **GitHub:** [your-github-username]
-- **LinkedIn:** [your-linkedin-url]
-
-This portfolio is actively evolving as I continue to expand my technical skillset and tackle more complex analytics problems.
+- **GitHub:** HarrisonNordstrom981
+- **LinkedIn:** www.linkedin.com/in/nordstromharrison
