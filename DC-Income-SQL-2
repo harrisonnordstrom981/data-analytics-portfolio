@@ -1,0 +1,84 @@
+-- Purpose:
+-- Build a clean, analysis-ready table for comparing pay by appointment type and tenure.
+-- This version standardizes appointment categories, labels pay type, and computes tenure in years.
+-- Contributed towards visualizations created in tableau
+
+CREATE OR REPLACE TABLE `dc-income.DC_INCOME_PROJET_DATASET.DC_INCOME_DATA_V3` AS
+
+WITH base AS (
+  -- 1) Select only the columns needed for downstream Tableau visuals
+  --    (keeps the model lightweight and easier to audit)
+  SELECT
+    OBJECTID,
+    FIRST_NAME,
+    LAST_NAME,
+    JOBTITLE,
+    DESCRSHORT,
+    GRADE,
+    GVT_TYPE_OF_APPT,
+
+    -- NOTE: HIREDATE_STRING is assumed to be stored as a DATE-type field in BigQuery.
+    -- If it is actually a STRING, cast it with SAFE.PARSE_DATE before calculating tenure.
+    HIREDATE_STRING AS hire_date,
+
+    -- COMPRATE is kept as-is (no conversion), because the goal is to compare distributions.
+    COMPRATE AS pay_rate
+  FROM `dc-income.DC_INCOME_PROJET_DATASET.DC_INCOME_RAW_DATA`
+),
+
+typed AS (
+  SELECT
+    *,
+
+    -- 2) Standardize appointment category from raw field:
+    --    Raw values appear like "CS - Reg/Term/Temp", so we split on " - "
+    --    and use the second chunk as the appointment type.
+    CASE
+      WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'TEMP' THEN 'Temporary'
+      WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'TERM' THEN 'Term'
+      WHEN UPPER(TRIM(SPLIT(GVT_TYPE_OF_APPT, ' - ')[SAFE_OFFSET(1)])) = 'REG'  THEN 'Regular'
+      ELSE 'Other/Unknown'
+    END AS appointment_group,
+
+    -- 3) Label likely pay type using a rate threshold:
+    --    Heuristic assumption: <1500 is likely hourly (or non-annual), >=1500 is likely annual.
+    --    This avoids converting units while still enabling segmented visuals.
+    CASE
+      WHEN pay_rate < 1500 THEN 'Hourly'
+      ELSE 'Annual'
+    END AS pay_type,
+
+    -- 4) Tenure computation:
+    --    We use 365.25 to account for leap years; Tableau will display this as a continuous measure.
+    DATE_DIFF(CURRENT_DATE(), hire_date, DAY) / 365.25 AS tenure_years,
+
+    -- Optional: quick flags that help explain filtering + data quality in writeups/README
+    CASE WHEN hire_date IS NULL THEN 1 ELSE 0 END AS flag_missing_hire_date,
+    CASE WHEN pay_rate IS NULL OR pay_rate <= 0 THEN 1 ELSE 0 END AS flag_invalid_pay_rate
+  FROM base
+)
+
+-- 5) Final output:
+--    Filters remove records that would distort visual comparisons (e.g., missing hire date, extreme tenure).
+SELECT
+  OBJECTID,
+  FIRST_NAME,
+  LAST_NAME,
+  JOBTITLE,
+  DESCRSHORT,
+  GRADE,
+  GVT_TYPE_OF_APPT,
+  appointment_group,
+  pay_type,
+  hire_date,
+  tenure_years,
+  pay_rate,
+
+  -- Keep flags for transparency (you can hide them in Tableau if you don’t need them on the viz)
+  flag_missing_hire_date,
+  flag_invalid_pay_rate
+
+FROM typed
+WHERE hire_date IS NOT NULL
+  AND tenure_years BETWEEN 0 AND 60   -- remove impossible/implausible tenure outliers
+  AND appointment_group IN ('Temporary','Term','Regular');
