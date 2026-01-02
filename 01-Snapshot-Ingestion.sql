@@ -3,15 +3,7 @@
 -- Stores point-in-time versions of the dataset to enable revision tracking
 -- Partitions data by snapshot date for efficient time-based analysis
 -- Clusters by state, month, age group, and rate type to optimize QA queries
---- Why it matters
--- Public health data are preliminary and subject to revision
--- Analysts must assess data reliability, not just trends
--- Snapshotting enables transparent validation and trust assessment
-
-
-
-
-
+-- *Bigquery limits clustering to 4 columns per table. I prioritized what I deemed to be most important for revision tracking
 
 
 CREATE TABLE IF NOT EXISTS
