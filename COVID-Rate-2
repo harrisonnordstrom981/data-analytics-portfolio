@@ -1,0 +1,12 @@
+-- 03_vw_covid_clean.sql
+-- Purpose:
+-- "Gold" layer for analysis/visualization:
+-- Keeps only valid dates/rates and excludes clearly invalid records.
+
+CREATE OR REPLACE VIEW
+`project2-482922.Covid_Rates.vw_covid_clean` AS
+SELECT *
+FROM `project2-482922.Covid_Rates.vw_covid_typed`
+WHERE month_date IS NOT NULL
+  AND monthly_rate IS NOT NULL
+  AND monthly_rate >= 0;
